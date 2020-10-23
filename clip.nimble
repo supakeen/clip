@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "supakeen"
-description   = "Collection of PRNGs."
+description   = "Command line parsing for Nim."
 license       = "MIT"
 srcDir        = "src"
 
@@ -10,4 +10,4 @@ srcDir        = "src"
 
 # Dependencies
 
-requires "nim >= 1.2.6"
+requires "nim >= 1.4.0"
