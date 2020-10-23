@@ -1,7 +1,13 @@
 import os
 import re
+
 import sequtils
 import strutils
+
+import tables
+
+import npeg
+import npeg/codegen
 
 proc unsafe(arg: TaintedString): bool =
   # See if any characters that should be quoted are in an argument
@@ -25,7 +31,19 @@ proc reassemble(args: seq[TaintedString]): string =
   # invoke the program.
   map(args, quote).join(" ")
 
-proc parse(args: seq[TaintedString]) =
-  echo reassemble(args)
+type Dict = Table[string, seq[string]]
 
-parse(commandLineParams())
+let defaultP = peg("pairs", d: Dict):
+  pairs <- pair * *(' ' * pair) * !1
+  key <- ('-' * Alnum) | ("--" * +Alnum)
+  value <- +Alnum
+  pair <- >key * ('=' | ' ') * >value:
+    d[$1] = @[$2]
+
+proc parse(parser: Parser, args: seq[TaintedString]) =
+  let input = reassemble(args)
+  var words: Table[string, seq[string]]
+  discard parser.match(input, words).ok
+  echo words
+
+parse(defaultP, commandLineParams())
