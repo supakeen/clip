@@ -15,6 +15,6 @@ proc quote(arg: TaintedString): string =
     "'" & arg.replace("'", "\"'\"") & "'"
 
 proc reassemble(args: seq[TaintedString]): string =
-  return map(args, quote).join(" ")
+  map(args, quote).join(" ")
 
 echo reassemble(commandLineParams())
