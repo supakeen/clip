@@ -19,3 +19,6 @@ suite "clip":
     assert quote("") == "''"
     assert quote("abc") == "abc"
     assert quote("a b") == "'a b'"
+
+  test "parse/DefaultParser":
+    assert parse(DefaultParser, @["-a", "b"]) == {"-a": @["b"]}.toTable

@@ -56,16 +56,15 @@ let DefaultParser = peg("Pairs", values: ValueDict):
     else:
       values[$1] = @[$2]
 
-proc parse(parser: Parser, args: seq[TaintedString]) =
+proc parse(parser: Parser, args: seq[TaintedString]): Table[string, seq[string]] =
   let input = reassemble(args)
-
-  echo input
 
   var
     values: Table[string, seq[string]]
 
   discard parser.match(input, values).ok
 
-  echo values
+  return values
 
-parse(DefaultParser, commandLineParams())
+when isMainModule:
+  echo parse(DefaultParser, commandLineParams())
