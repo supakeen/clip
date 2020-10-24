@@ -38,15 +38,26 @@ type ValueDict = Table[string, seq[string]]
 # value are not allowed. Long options, a GNU extension, are also supported.
 #
 # See GNU documentation at: https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
-let DefaultParser = peg("pairs", values: ValueDict):
-  pairs <- pair * *(' ' * pair) * !1
-  key <- ('-' * Alnum) | ("--" * +Alnum)
-  value <- +Alnum
-  pair <- >key * ('=' | ' ') * >value:
+let DefaultParser = peg("Pairs", values: ValueDict):
+  Pairs <- Pair * *(' ' * Pair) * !1
+  SingleQuote <- '\''
+  ShortOption <- Alnum
+  LongOption <- +Alnum
+  ShortPrefix <- '-'
+  LongPrefix <- "--"
+  Separator <- Blank
+  Key <- (ShortPrefix * ShortOption) | (LongPrefix * LongOption)
+  UnquotedValue <- +Alnum
+  QuotedValue <- SingleQuote * +(Alnum | Space) * SingleQuote
+  Value <- (UnquotedValue | QuotedValue)
+  Pair <- >Key * Separator * >Value:
     values[$1] = @[$2]
 
 proc parse(parser: Parser, args: seq[TaintedString]) =
   let input = reassemble(args)
+
+  echo input
+
   var
     values: Table[string, seq[string]]
 
