@@ -22,3 +22,7 @@ suite "clip":
 
   test "parse/DefaultParser":
     assert parse(DefaultParser, @["-a", "b"]) == {"-a": @["b"]}.toTable
+    assert parse(DefaultParser, @["-a", "b", "-a", "c"]) == {"-a": @["b", "c"]}.toTable
+    assert parse(DefaultParser, @["--long", "long", "--long", "other"]) == {"--long": @["long", "other"]}.toTable
+
+    assert parse(DefaultParser, @["-b", "with a space"]) == {"-b": @["'with a space'"]}.toTable
