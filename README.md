@@ -27,3 +27,8 @@ import clip
 let cli = parse(DefaultParser, commandLineParams())
 echo cli
 ```
+
+## Bindings
+
+Experimental Python bindings are being developed in the [vitani](https://github.com/supakeen/vitani)
+project.
