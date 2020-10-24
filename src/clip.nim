@@ -38,7 +38,7 @@ type ValueDict = Table[string, seq[string]]
 # value are not allowed. Long options, a GNU extension, are also supported.
 #
 # See GNU documentation at: https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
-let DefaultParser = peg("Pairs", values: ValueDict):
+let DefaultParser* = peg("Pairs", values: ValueDict):
   Pairs <- Pair * *(' ' * Pair) * !1
   SingleQuote <- '\''
   ShortOption <- Alnum
@@ -56,7 +56,7 @@ let DefaultParser = peg("Pairs", values: ValueDict):
     else:
       values[$1] = @[$2]
 
-proc parse(parser: Parser, args: seq[TaintedString]): Table[string, seq[string]] =
+proc parse*(parser: Parser, args: seq[TaintedString]): Table[string, seq[string]] =
   let input = reassemble(args)
 
   var
