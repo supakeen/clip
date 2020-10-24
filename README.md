@@ -21,5 +21,9 @@ nimble install clip
 ## Usage
 
 ```nim
+import os
 import clip
+
+let cli = parse(DefaultParser, commandLineParams())
+echo cli
 ```
