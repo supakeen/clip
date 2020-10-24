@@ -31,19 +31,27 @@ proc reassemble(args: seq[TaintedString]): string =
   # invoke the program.
   map(args, quote).join(" ")
 
-type Dict = Table[string, seq[string]]
+type ValueDict = Table[string, seq[string]]
 
-let defaultP = peg("pairs", d: Dict):
+# The DefaultParser follows the POSIX standard argument syntax very closely
+# with the noteworthy exception that short options directly followed by a
+# value are not allowed. Long options, a GNU extension, are also supported.
+#
+# See GNU documentation at: https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
+let DefaultParser = peg("pairs", values: ValueDict):
   pairs <- pair * *(' ' * pair) * !1
   key <- ('-' * Alnum) | ("--" * +Alnum)
   value <- +Alnum
   pair <- >key * ('=' | ' ') * >value:
-    d[$1] = @[$2]
+    values[$1] = @[$2]
 
 proc parse(parser: Parser, args: seq[TaintedString]) =
   let input = reassemble(args)
-  var words: Table[string, seq[string]]
-  discard parser.match(input, words).ok
-  echo words
+  var
+    values: Table[string, seq[string]]
 
-parse(defaultP, commandLineParams())
+  discard parser.match(input, values).ok
+
+  echo values
+
+parse(DefaultParser, commandLineParams())
