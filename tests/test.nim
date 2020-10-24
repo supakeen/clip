@@ -14,3 +14,8 @@ suite "clip":
     assert reassemble(@["", ""]) == "'' ''"
     assert reassemble(@["Hello World", "what"]) == "'Hello World' what"
     assert reassemble(@["Hello \"World", "wh'at"]) == "'Hello \"World' 'wh\"'\"at'"
+
+  test "quote":
+    assert quote("") == "''"
+    assert quote("abc") == "abc"
+    assert quote("a b") == "'a b'"
