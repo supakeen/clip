@@ -45,18 +45,19 @@ let DefaultParser = peg("Pairs", values: ValueDict):
   LongOption <- +Alnum
   ShortPrefix <- '-'
   LongPrefix <- "--"
-  Separator <- Blank
+  Separator <- (Blank | '=')
   Key <- (ShortPrefix * ShortOption) | (LongPrefix * LongOption)
   UnquotedValue <- +Alnum
   QuotedValue <- SingleQuote * +(Alnum | Space) * SingleQuote
   Value <- (UnquotedValue | QuotedValue)
   Pair <- >Key * Separator * >Value:
-    values[$1] = @[$2]
+    if values.hasKey($1):
+      values[$1].add($2)
+    else:
+      values[$1] = @[$2]
 
 proc parse(parser: Parser, args: seq[TaintedString]) =
   let input = reassemble(args)
-
-  echo input
 
   var
     values: Table[string, seq[string]]
