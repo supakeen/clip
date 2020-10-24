@@ -59,6 +59,8 @@ let DefaultParser = peg("Pairs", values: ValueDict):
 proc parse(parser: Parser, args: seq[TaintedString]) =
   let input = reassemble(args)
 
+  echo input
+
   var
     values: Table[string, seq[string]]
 
