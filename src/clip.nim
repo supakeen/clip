@@ -46,11 +46,16 @@ let DefaultParser* = peg("Pairs", values: ValueDict):
   ShortPrefix <- '-'
   LongPrefix <- "--"
   Separator <- (Blank | '=')
-  Key <- (ShortPrefix * ShortOption) | (LongPrefix * LongOption)
+  UnquotedKey <- (ShortPrefix * ShortOption) | (LongPrefix * LongOption)
+  QuotedKey <- SingleQuote * ((ShortPrefix * ShortOption) | (LongPrefix * LongOption))
+  Key <- (UnquotedKey | QuotedKey)
   UnquotedValue <- +Alnum
   QuotedValue <- SingleQuote * +(Alnum | Space) * SingleQuote
+  TmpValue <- +(Alnum | Space)
   Value <- (UnquotedValue | QuotedValue)
-  Pair <- >Key * Separator * >Value:
+  QuotedPair <- SingleQuote * >Key * Separator * >TmpValue * SingleQuote
+  UnquotedPair <- >Key * Separator * >Value
+  Pair <- (QuotedPair | UnquotedPair):
     if values.hasKey($1):
       values[$1].add($2)
     else:

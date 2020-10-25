@@ -31,6 +31,5 @@ suite "clip":
 
     assert parse(DefaultParser, @["-b", "with a space"]) == {"-b": @["'with a space'"]}.toTable
 
-    # TODO fix parsing of these testcases
-    # assert parse(DefaultParser, @["-b=\"with a space\""]) == {"-b": @["'with a space'"]}.toTable
-    # assert parse(DefaultParser, @["--long=\"with a space\""]) == {"--long": @["'with a space'"]}.toTable
+    assert parse(DefaultParser, @["-b=with a space"]) == {"-b": @["with a space"]}.toTable
+    assert parse(DefaultParser, @["--long=with a space"]) == {"--long": @["with a space"]}.toTable
