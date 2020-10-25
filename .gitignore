@@ -1,2 +1,2 @@
-tests/test_fun
-tests/test_lcg
+src/clip
+tests/test

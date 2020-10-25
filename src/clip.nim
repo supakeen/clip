@@ -65,6 +65,3 @@ proc parse*(parser: Parser, args: seq[TaintedString]): Table[string, seq[string]
   discard parser.match(input, values).ok
 
   return values
-
-when isMainModule:
-  echo parse(DefaultParser, commandLineParams())
