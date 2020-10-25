@@ -30,3 +30,7 @@ suite "clip":
     assert parse(DefaultParser, @["--long", "long", "--long", "other"]) == {"--long": @["long", "other"]}.toTable
 
     assert parse(DefaultParser, @["-b", "with a space"]) == {"-b": @["'with a space'"]}.toTable
+
+    # TODO fix parsing of these testcases
+    # assert parse(DefaultParser, @["-b=\"with a space\""]) == {"-b": @["'with a space'"]}.toTable
+    # assert parse(DefaultParser, @["--long=\"with a space\""]) == {"--long": @["'with a space'"]}.toTable
