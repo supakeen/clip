@@ -7,6 +7,10 @@ suite "clip":
     assert unsafe("a") == false
     assert unsafe("a'") == true
     assert unsafe(" ") == true
+    assert unsafe("\"") == true
+    assert unsafe("$IFS") == true
+    assert unsafe("${IFS}") == true
+    assert unsafe(";") == true
 
   test "reassemble":
     assert reassemble(@["foo"]) == "foo"
