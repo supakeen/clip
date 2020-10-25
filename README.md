@@ -9,6 +9,7 @@ style of command line options.
 - [ ] Support GNU parsing (mostly).
 - [ ] `-d="foo bar"` -> `'-d=foo bar'` is currently not parsed correctly.
 - [ ] Constraints on the output (exclusivity, etc).
+- [ ] High level API to build CLI options.
 
 ## Installation
 
